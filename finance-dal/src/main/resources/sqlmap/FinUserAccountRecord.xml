@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fin_user_account_record表 -->
+<mapper namespace="com.cx.finance.dal.dao.FinUserAccountRecordDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,gmt_create,user_id,amount,ref_id,remark,operator,type 
+    </sql>
+
+    <sql id="queryAllFields">
+        ar.id rid,ar.gmt_create,ar.account_amount,ar.user_id,ar.amount,ar.ref_id,ar.remark,ar.operator,ar.type
+    </sql>
+
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="userId != null">
+            AND user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="amount != null">
+            AND amount = #{amount,jdbcType=VARCHAR}
+        </if>
+        <if test="refId != null">
+            AND ref_id = #{refId,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null">
+            AND remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="operator != null">
+            AND operator = #{operator,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            AND type = #{type,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="FinUserAccountRecordDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO fin_user_account_record
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            gmt_create,
+            <if test="userId != null">
+	            user_id,
+	        </if>
+	        <if test="amount != null">        
+	            amount,
+	        </if>
+	        <if test="refId != null">        
+	            ref_id,
+	        </if>
+	        <if test="remark != null">        
+	            remark,
+	        </if>
+            <if test="accountAmount != null">
+                account_amount,
+            </if>
+	        <if test="operator != null">        
+	            operator,
+	        </if>
+	        <if test="type != null">        
+	            type,
+	        </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    now(),
+		    <if test="userId != null" >
+		       #{userId,jdbcType=INTEGER},
+		    </if>
+		    <if test="amount != null" >
+		       #{amount,jdbcType=VARCHAR},
+		    </if>
+		    <if test="refId != null" >
+		       #{refId,jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null" >
+		       #{remark,jdbcType=VARCHAR},
+		    </if>
+            <if test="accountAmount != null" >
+                #{accountAmount,jdbcType=VARCHAR},
+            </if>
+		    <if test="operator != null" >
+		       #{operator,jdbcType=VARCHAR},
+		    </if>
+		    <if test="type != null" >
+		       #{type,jdbcType=VARCHAR},
+		    </if>
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="FinUserAccountRecordDo">
+        UPDATE fin_user_account_record
+          <set>
+            <if test="userId != null">        
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">        
+                amount = #{amount,jdbcType=VARCHAR},
+            </if>
+            <if test="refId != null">        
+                ref_id = #{refId,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">        
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">        
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">        
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="FinUserAccountRecordDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user_account_record
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="FinUserAccountRecordDo" parameterType="FinUserAccountRecordDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user_account_record
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="FinUserAccountRecordDo" parameterType="FinUserAccountRecordDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user_account_record
+        <include refid="commonCondition"/>
+    </select>
+
+
+    <select id="getUserAccountRecodListByMobile" resultType="FinUserAccountDto">
+        SELECT
+        <include refid="queryAllFields" />
+        FROM fin_user_account_record ar LEFT JOIN
+        fin_user u ON ar.user_id=u.id
+        WHERE ar.is_delete = 0 AND u.mobile=#{mobile}
+        order by ar.id desc
+    </select>
+</mapper>

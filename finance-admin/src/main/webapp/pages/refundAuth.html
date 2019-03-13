@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户管理</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="Publish_Time" content="2018-08-15 14:35:59" />
+
+    <link rel="stylesheet" type="text/css" href="/res3rd/js/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="/res/css/comm.css">
+
+    <script src="/res3rd/js/jquery/jquery-3.0.0.min.js"></script>
+
+    <script src="/res3rd/js/tool/tool.js" ></script>
+    <script src="/res3rd/js/tool/date.format.js" ></script>
+
+    <style>
+    </style>
+</head>
+<body>
+<div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+    <br/>
+    <span class="layui-breadcrumb" lay-separator=">">
+        <a href="">财务管理</a>
+        <a href="">退款审核</a>
+      </span>
+    <br/>
+
+    <!-- 管理列表 -->
+    <div id="divList">
+        <fieldset class="layui-elem-field layui-field-title" >
+            <legend>退款审核</legend>
+            <div class="layui-row">
+                <form class="layui-form" action="" id="formQuery">
+                    &nbsp;&nbsp;手机号：
+                    <div class="layui-inline">
+                        <input class="layui-input" id="mobile"  name="mobile" autocomplete="off" style="width: 140px;" placeholder="手机号"/>
+                    </div>
+                    &nbsp;&nbsp;申请状态：
+                    <div class="layui-input-inline" style="width: 140px;">
+                        <select id="status">
+                            <option value="" >全部</option>
+                            <option value="PROCEESING" selected >等待审核</option>
+                            <option value="SUCCESS">审核成功</option>
+                            <option value="FAIL">审核未通过</option>
+                        </select>
+                    </div>
+                    &nbsp;&nbsp;退款方式：
+                    <div class="layui-input-inline" style="width: 140px;">
+                        <select id="type">
+                            <option value="" selected>全部</option>
+                            <option value="ISJREBATE">爱上街余额</option>
+                            <option value="TRANSFER">支付宝转账</option>
+                        </select>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp; <button class="layui-btn layui-btn-normal" id="btnSearch">查询</button>
+                </form>
+            </div>
+            <table id="refundTable" lay-filter="refundTable">
+            </table>
+            <script type="text/html" id="reviewDiv">
+                {{#  if(d.status == 'PROCEESING'){ }}
+                <button id="barRefundTable" class="layui-btn layui-btn-ruibao layui-btn-sm"
+                        data-entity="{{= JSON.stringify(d) }}"
+                        data-id="{{d.rid}}"
+                        type="button" onclick="UI.review(this);">退款审批</button>
+                {{#  } else {  }}
+                <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                        data-entity="{{= JSON.stringify(d) }}"
+                        data-id="{{d.rid}}"
+                        type="button">已审核</button>
+                {{#  } }}
+            </script>
+
+            <script type="text/html" id="dlGmtCreate">
+                {{= d.gmtCreate? new DateFormat().format(new Date(d.gmtCreate), 'yyyy-MM-dd HH:mm'):'' }}
+            </script>
+            <script type="text/html" id="dlStatus">
+                {{= UI.getStatusDesc(d.status) }}
+            </script>
+            <div type="text/html" id="statusDiv" style="display: none;">
+                {{#  if(d.status == 'PROCEESING'){ }}审核中
+                {{#  } else if(d.status == 'SUCCESS'){  }}成功
+                {{#  }else if((d.status == 'FAIL')){   }}拒绝
+                {{#  } }}
+            </div>
+
+            <div type="text/html" id="typeDiv" style="display: none;">
+                {{#  if(d.type == 'ISJREBATE'){ }}退到爱上余额
+                {{#  } else if(d.type == 'TRANSFER'){  }}线下转账
+                {{#  } }}
+            </div>
+        </fieldset>
+    </div>
+
+
+
+
+    <div id="isjRefund" style="display: none;">
+        <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <font size="3">退款金额:</font>
+                    <font size="5"><label id="iFefundAmount"></label>元</font>
+                </div>
+
+                <br>
+                <br>
+                <div class="layui-form-item">
+                    <font size="4">确定退款到爱上街账户余额？</font>
+                </div>
+        </div>
+    </div>
+    <div id="offlineRefund" style="display: none;">
+        <div class="layui-field-box">
+            <div class="layui-form-item">
+                <font size="3">退款金额:</font>
+                <font size="5"><label id="oRefundAmount"></label>元</font>
+            </div>
+            <br>
+            <div class="layui-form-item">
+                <font size="3">退款账户:</font>
+                <font size="5"><label id="oFefundAccount"></label></font>
+            </div>
+            <br>
+            <div class="layui-form-item">
+                <font size="4">确定线下转账退款？</font>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</body>
+<script src="/res3rd/js/layui/layui.js"></script>
+<script src="/res/js/pre.js"></script>
+
+<script>
+    layui.config({
+        base: '/res/js/'
+    }).use('refundAuth'); //加载入口
+</script>
+<script src="/res/js/config.js"></script>
+</html>

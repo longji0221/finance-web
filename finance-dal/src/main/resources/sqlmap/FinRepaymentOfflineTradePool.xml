@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fin_repayment_offline_trade_pool表 -->
+<mapper namespace="com.cx.finance.dal.dao.FinRepaymentOfflineTradePoolDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,trade_no,payer_account,repay_type,amount,remark,pay_time,gmt_create,real_name,benefit_account,operator
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="tradeNo != null">
+            AND trade_no = #{tradeNo,jdbcType=VARCHAR}
+        </if>
+        <if test="payerAccount != null">
+            AND payer_account = #{payerAccount,jdbcType=VARCHAR}
+        </if>
+        <if test="repayType != null">
+            AND repay_type = #{repayType,jdbcType=VARCHAR}
+        </if>
+        <if test="amount != null">
+            AND amount = #{amount,jdbcType=DECIMAL}
+        </if>
+        <if test="remark != null">
+            AND remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="payTime !=null">
+            AND pay_time = #{payTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="realName != null">
+            AND real_name = #{realName,jdbcType=VARCHAR}
+        </if>
+        <if test="benefitAccount != null">
+            AND benefit_account = #{benefitAccount,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="FinRepaymentOfflineTradePoolDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO fin_repayment_offline_trade_pool
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="tradeNo != null">        
+	            trade_no,
+	        </if>
+	        <if test="payerAccount != null">        
+	            payer_account,
+	        </if>
+	        <if test="repayType != null">        
+	            repay_type,
+	        </if>
+	        <if test="amount != null">        
+	            amount,
+	        </if>
+	        <if test="remark != null">        
+	            remark,
+	        </if>
+	        <if test="payTime != null">        
+	            pay_time,
+	        </if>
+	        <if test="gmtCreate != null">        
+	            gmt_create,
+	        </if>
+	        <if test="realName != null">        
+	            real_name,
+	        </if>
+	        <if test="benefitAccount != null">        
+	            benefit_account,
+	        </if>
+            <if test="operator != null">
+                operator,
+            </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="tradeNo != null" >
+		       #{tradeNo,jdbcType=VARCHAR},
+		    </if>
+		    <if test="payerAccount != null" >
+		       #{payerAccount,jdbcType=VARCHAR},
+		    </if>
+		    <if test="repayType != null" >
+		       #{repayType,jdbcType=VARCHAR},
+		    </if>
+		    <if test="amount != null" >
+		       #{amount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="remark != null" >
+		       #{remark,jdbcType=VARCHAR},
+		    </if>
+		    <if test="payTime != null" >
+		       #{payTime,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="gmtCreate != null" >
+		       #{gmtCreate,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="realName != null" >
+		       #{realName,jdbcType=VARCHAR},
+		    </if>
+		    <if test="benefitAccount != null" >
+		       #{benefitAccount,jdbcType=VARCHAR},
+		    </if>
+            <if test="operator != null" >
+                #{operator,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="FinRepaymentOfflineTradePoolDo">
+        UPDATE fin_repayment_offline_trade_pool
+          <set>
+            <if test="tradeNo != null">        
+                trade_no = #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="payerAccount != null">        
+                payer_account = #{payerAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="repayType != null">        
+                repay_type = #{repayType,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">        
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">        
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null">        
+                pay_time = #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="realName != null">        
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="benefitAccount != null">        
+                benefit_account = #{benefitAccount,jdbcType=VARCHAR},
+            </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="FinRepaymentOfflineTradePoolDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_repayment_offline_trade_pool
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="FinRepaymentOfflineTradePoolDo" parameterType="FinRepaymentOfflineTradePoolDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_repayment_offline_trade_pool
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="FinRepaymentOfflineTradePoolDo" parameterType="FinRepaymentOfflineTradePoolDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_repayment_offline_trade_pool
+        <include refid="commonCondition"/>
+    </select>
+
+    <select id="getListRepaymentOfflinePool" resultType="FinRepaymentOfflineTradePoolDo" parameterType="com.cx.finance.dal.query.FinRepaymentOfflineTradePoolQuery">
+        SELECT
+        <include refid="queryFields"/>
+        FROM fin_repayment_offline_trade_pool
+        WHERE is_delete = 0
+        <if test="tradeNo != null and tradeNo != ''">
+            AND trade_no = #{tradeNo}
+        </if>
+        <if test="payerAccount != null and payerAccount != '' ">
+            AND payer_account = #{payerAccount}
+        </if>
+        <if test="dateStart !=null and  dateEnd !=null"   >
+            AND pay_time  BETWEEN  #{dateStart} AND #{dateEnd}
+        </if>
+        <if test="benefitAccount!=null and benefitAccount !='' " >
+            AND benefit_account = #{benefitAccount}
+        </if>
+        ORDER BY pay_time DESC
+    </select>
+
+    <select id="offlineRepaymentDataQuery" resultType="com.cx.finance.dal.query.FinRepaymentOfflineTradePoolQuery" parameterType="com.cx.finance.dal.query.FinRepaymentOfflineTradePoolQuery">
+        SELECT
+        <include refid="queryFields"/>
+        FROM fin_repayment_offline_trade_pool
+        WHERE is_delete = 0
+        <if test="condition == 'tradeNo'">
+            AND trade_no = #{valueContent}
+        </if>
+        <if test="condition == 'payerAccount' ">
+            AND payer_account = #{valueContent}
+        </if>
+        ORDER BY pay_time DESC
+    </select>
+
+    <select id="getDayAmount" resultType="HashMap">
+        SELECT
+        SUM(amount)as amount,DATE_FORMAT(pay_time,'%Y-%m-%d') as time
+        FROM fin_repayment_offline_trade_pool
+        WHERE is_delete = 0
+        <if test="benefitAccount!=null and benefitAccount !='' " >
+            AND benefit_account = #{benefitAccount}
+        </if>
+        <if test="dateStart !=null and  dateEnd !=null"   >
+            AND DATE_FORMAT(pay_time,'%Y-%m-%d %h:%i:%s')  BETWEEN  #{dateStart} AND #{dateEnd}
+        </if>
+        GROUP BY DATE_FORMAT(pay_time,'%Y-%m-%d')
+        ORDER BY DATE_FORMAT(pay_time,'%Y-%m-%d %h:%i:%s') DESC
+    </select>
+
+    <select id="getDayAmountByAlipay" resultType="HashMap">
+        SELECT
+        SUM(amount)as amount,DATE_FORMAT(pay_time,'%Y-%m-%d') as time
+        FROM fin_repayment_offline_trade_pool
+        WHERE is_delete = 0 AND repay_type='ALIPAY'
+        <if test="benefitAccount!=null and benefitAccount !='' " >
+            AND benefit_account = #{benefitAccount}
+        </if>
+        <if test="dateStart !=null and  dateEnd !=null"   >
+            AND DATE_FORMAT(pay_time,'%Y-%m-%d %h:%i:%s')  BETWEEN  #{dateStart} AND #{dateEnd}
+        </if>
+        GROUP BY DATE_FORMAT(pay_time,'%Y-%m-%d')
+		ORDER BY DATE_FORMAT(pay_time,'%Y-%m-%d %h:%i:%s') DESC
+    </select>
+    <select id="getRepaymentOfflinePoolDataByTradeNo" resultType="FinRepaymentOfflineTradePoolDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_repayment_offline_trade_pool
+        WHERE is_delete = 0  AND trade_no = #{tradeNo}
+    </select>
+
+    <select id="getNoUseTradesByMobile" resultType="HashMap">
+        SELECT
+           trade_no as tradeNo,amount as amount,id as rid,repay_type as type,gmt_create as gmtCreate,operator
+        FROM fin_repayment_offline_trade_pool
+        WHERE is_delete = 0  AND trade_no
+        NOT IN (SELECT p.trade_no FROM fin_repayment_offline_trade_pool as r inner join fin_panged_trade_pool as p
+        on r.trade_no =p.trade_no where  r.payer_account=#{mobile})
+        AND  payer_account=#{mobile}
+        ORDER BY id DESC
+    </select>
+
+
+</mapper>

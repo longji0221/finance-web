@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fin_actual_paid表 -->
+<mapper namespace="com.cx.finance.dal.dao.FinActualPaidDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,gmt_create,gmt_modified,borrow_no,actual_amount,actual_time,tpp_nid,pay_trade_no,product_name,product_type,liquidation_company,remark
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="gmtModified !=null">
+            AND gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        </if>
+        <if test="borrowNo != null">
+            AND borrow_no = #{borrowNo,jdbcType=VARCHAR}
+        </if>
+        <if test="actualAmount != null">
+            AND actual_amount = #{actualAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="actualTime !=null">
+            AND actual_time = #{actualTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="tppNid != null">
+            AND tpp_nid = #{tppNid,jdbcType=VARCHAR}
+        </if>
+        <if test="payTradeNo != null">
+            AND pay_trade_no = #{payTradeNo,jdbcType=VARCHAR}
+        </if>
+        <if test="productName != null">
+            AND product_name = #{productName,jdbcType=VARCHAR}
+        </if>
+        <if test="productType != null">
+            AND product_type = #{productType,jdbcType=VARCHAR}
+        </if>
+        <if test="liquidationCompany != null">
+            AND liquidation_company = #{liquidationCompany,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null">
+            AND remark = #{remark,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="FinActualPaidDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO fin_actual_paid
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="gmtCreate != null">        
+	            gmt_create,
+	        </if>
+	        <if test="gmtModified != null">        
+	            gmt_modified,
+	        </if>
+	        <if test="borrowNo != null">        
+	            borrow_no,
+	        </if>
+	        <if test="actualAmount != null">        
+	            actual_amount,
+	        </if>
+	        <if test="actualTime != null">        
+	            actual_time,
+	        </if>
+	        <if test="tppNid != null">        
+	            tpp_nid,
+	        </if>
+	        <if test="payTradeNo != null">
+	            pay_trade_no,
+	        </if>
+	        <if test="productName != null">        
+	            product_name,
+	        </if>
+	        <if test="productType != null">        
+	            product_type,
+	        </if>
+	        <if test="liquidationCompany != null">        
+	            liquidation_company,
+	        </if>
+	        <if test="remark != null">        
+	            remark,
+	        </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="gmtCreate != null" >
+		       #{gmtCreate,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="gmtModified != null" >
+		       #{gmtModified,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="borrowNo != null" >
+		       #{borrowNo,jdbcType=VARCHAR},
+		    </if>
+		    <if test="actualAmount != null" >
+		       #{actualAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="actualTime != null" >
+		       #{actualTime,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="tppNid != null" >
+		       #{tppNid,jdbcType=VARCHAR},
+		    </if>
+		    <if test="payTradeNo != null" >
+		       #{payTradeNo,jdbcType=VARCHAR},
+		    </if>
+		    <if test="productName != null" >
+		       #{productName,jdbcType=VARCHAR},
+		    </if>
+		    <if test="productType != null" >
+		       #{productType,jdbcType=VARCHAR},
+		    </if>
+		    <if test="liquidationCompany != null" >
+		       #{liquidationCompany,jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null" >
+		       #{remark,jdbcType=VARCHAR},
+		    </if>
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="FinActualPaidDo">
+        UPDATE fin_actual_paid
+          <set>
+            <if test="borrowNo != null">        
+                borrow_no = #{borrowNo,jdbcType=VARCHAR},
+            </if>
+            <if test="actualAmount != null">        
+                actual_amount = #{actualAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="actualTime != null">        
+                actual_time = #{actualTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="tppNid != null">        
+                tpp_nid = #{tppNid,jdbcType=VARCHAR},
+            </if>
+            <if test="payTradeNo != null">
+                pay_trade_no = #{payTradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">        
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productType != null">        
+                product_type = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="liquidationCompany != null">        
+                liquidation_company = #{liquidationCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">        
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="FinActualPaidDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_actual_paid
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="FinActualPaidDo" parameterType="FinActualPaidDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_actual_paid
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="FinActualPaidDo" parameterType="FinActualPaidDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_actual_paid
+        <include refid="commonCondition"/>
+    </select>
+
+    <select id="getListByQuery" resultType="FinActualPaidDo" parameterType="com.cx.finance.dal.query.ActualPaidQuery">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_actual_paid
+        WHERE is_delete = 0
+        <if test="borrowNo != null and borrowNo != '' ">
+            AND borrow_no = #{borrowNo}
+        </if>
+        <if test="productType != null and productType != ''">
+            AND product_type = #{productType}
+        </if>
+        <if test="liquidationCompany != null and liquidationCompany != ''">
+            AND liquidation_company = #{liquidationCompany}
+        </if>
+        <if test="gmtStart != null and gmtStart != ''">
+            AND
+            <![CDATA[actual_time >= CONCAT(DATE_FORMAT(#{gmtStart},'%Y-%m-%d')," 00:00:00")]]>
+        </if>
+        <if test="gmtEnd != null and gmtEnd != ''">
+            AND
+            <![CDATA[actual_time <= CONCAT(DATE_FORMAT(#{gmtEnd},'%Y-%m-%d')," 23:59:59")]]>
+        </if>
+        ORDER BY actual_time DESC
+    </select>
+
+    <insert id="batchinsert" parameterType="list">
+        insert into fin_actual_paid (gmt_create,gmt_modified,borrow_no,actual_amount,actual_time,tpp_nid,pay_trade_no,product_name,product_type,liquidation_company) values
+        <foreach item="item" collection="list" separator=",">
+            ( now(),now(),
+            #{item.borrowNo}, #{item.actualAmount}, #{item.actualTime}, #{item.tppNid}, #{item.payTradeNo}, #{item.productName}, #{item.productType},
+            #{item.liquidationCompany}
+            )
+        </foreach>
+    </insert>
+</mapper>

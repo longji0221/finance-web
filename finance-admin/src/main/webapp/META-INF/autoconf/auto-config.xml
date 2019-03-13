@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <group>
+        <property name="finance.aes.password" defaultValue="testC1b6x@6aH$2dlw" description="aes passwd" />
+        <property name="finance.check.sign.switch" defaultValue="0" description="检查签名开关，：打开 （检查签名） 0：关闭（不检查签名）" />
+        <property name="finance.inveloment.type" defaultValue="test" description="当前环境" />
+        <property name="finance.sync.lock.try.times" defaultValue="1" description="同步锁重试次数" /> 
+        <!-- log4j -->
+        <property name="finance.log.level" defaultValue="info" description="log4j level" />
+        <property name="finance.log.path.root" defaultValue="/home/ald/logs/finance" description="log dir" />
+        
+        <!-- db -->
+        <property name="finance.db.url" defaultValue="OZAtwQcAyH5+BVcIbdZW6euzZCntyUxwH743Udhr9+LU+d0IhGa6JAh4bXHXkgeqEAD/gApVuKDhPmIPoVSEBQ==" description="dburl" />
+        <property name="finance.db.username" defaultValue="BGxKtjbfzgi+lr5EB+LU6Q==" description="db username" />
+        <property name="finance.db.password" defaultValue="cJiZKo2M0HcKZdjgGmv/vQ==" description="db password" />
+
+        <!-- redis -->
+        <property name="finance.redis.hostname" defaultValue="IJgdKMamAcP5btliO3edNq7Dc1rJrWG6qZ7zI9RsgCA=" description="redis host" />
+        <property name="finance.redis.port" defaultValue="EjxHo0U8fOjuwprOOe5jjg==" description="redis port" />
+        <property name="finance.redis.password" defaultValue="cJiZKo2M0HcKZdjgGmv/vQ==" description="redis password" />
+        <property name="finance.redis.database" defaultValue="10" description="redis database" />
+
+        <!-- api -->
+        <property name="api.isj.host" defaultValue="https://dtestapp.51fanbei.com" description="api port" />
+        <property name="api.jsd.host" defaultValue="http://192.168.106.191:8280" description="api port" />
+        <property name="api.dsed.host" defaultValue="http://192.168.112.40:8080" description="api port" />
+        <property name="api.isjadmin.host" defaultValue="https://admin.51fanbei.com" description="api port" />
+
+        <!-- collection -->
+        <property name="fin.collection.url" defaultValue="http://192.168.106.92:8280" description="fin.collection.url" />
+        <property name="fin.collection.report.url" defaultValue=" http://192.168.106.20:10086" description="fin.collection.report.url" />
+        <property name="fin.collection.token" defaultValue="eyJhbGciOiJIUzI1NiIsImNvbXBhbnlJZCI6NH0.eyJhdWQiOiI0IiwiaXNzIjoiQUxEIiwiaWF0IjoxNTQzODkyNzg5fQ.wsnxpiIvBHOSWHJyrW4AOsJBDaTyfSMiD1y8GOKfzS8" description="fin.collection.token" />
+
+    </group>
+
+    <script>
+        <generate template="WEB-INF/classes/props/log4j.xml" />
+        <generate template="WEB-INF/classes/spring/biz-beans.xml" />
+        <generate template="WEB-INF/classes/props/config.properties" />
+        <generate template="WEB-INF/classes/props/encrypt.properties" />
+    </script>
+
+</config>

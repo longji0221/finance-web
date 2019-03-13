@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fin_user表 -->
+<mapper namespace="com.cx.finance.dal.dao.FinUserDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,user_name,mobile,gender,birthday,id_number,gmt_create,gmt_modified
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="userName != null">
+            AND user_name = #{userName,jdbcType=INTEGER}
+        </if>
+        <if test="mobile != null">
+            AND mobile = #{mobile,jdbcType=INTEGER}
+        </if>
+        <if test="gender != null">
+            AND gender = #{gender,jdbcType=VARCHAR}
+        </if>
+        <if test="birthday != null">
+            AND birthday = #{birthday,jdbcType=VARCHAR}
+        </if>
+        <if test="idNumber != null">
+            AND id_number = #{idNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="gmtModified !=null">
+            AND gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="FinUserDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO fin_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="userName != null">        
+	            user_name,
+	        </if>
+	        <if test="mobile != null">        
+	            mobile,
+	        </if>
+	        <if test="gender != null">        
+	            gender,
+	        </if>
+	        <if test="birthday != null">        
+	            birthday,
+	        </if>
+	        <if test="idNumber != null">        
+	            id_number,
+	        </if>
+            gmt_create,
+
+            <if test="gmtModified != null">
+	            gmt_modified,
+	        </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="userName != null" >
+		       #{userName,jdbcType=INTEGER},
+		    </if>
+		    <if test="mobile != null" >
+		       #{mobile,jdbcType=INTEGER},
+		    </if>
+		    <if test="gender != null" >
+		       #{gender,jdbcType=VARCHAR},
+		    </if>
+		    <if test="birthday != null" >
+		       #{birthday,jdbcType=VARCHAR},
+		    </if>
+		    <if test="idNumber != null" >
+		       #{idNumber,jdbcType=VARCHAR},
+		    </if>
+            now()                 ,
+
+            <if test="gmtModified != null" >
+		       #{gmtModified,jdbcType=TIMESTAMP},
+		    </if>
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="FinUserDo">
+        UPDATE fin_user
+          <set>
+            <if test="userName != null">        
+                user_name = #{userName,jdbcType=INTEGER},
+            </if>
+            <if test="mobile != null">        
+                mobile = #{mobile,jdbcType=INTEGER},
+            </if>
+            <if test="gender != null">        
+                gender = #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">        
+                birthday = #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="idNumber != null">        
+                id_number = #{idNumber,jdbcType=VARCHAR},
+            </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="FinUserDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="FinUserDo" parameterType="FinUserDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="FinUserDo" parameterType="FinUserDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user
+        <include refid="commonCondition"/>
+    </select>
+
+    <select id="getUserByMobile" resultType="FinUserDo" parameterType="String">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user
+        WHERE is_delete = 0
+        <if test="mobile != null || mobile != ''">
+            AND  mobile=#{mobile}
+        </if>
+        ORDER BY gmt_create DESC LIMIT 1
+    </select>
+    
+</mapper>

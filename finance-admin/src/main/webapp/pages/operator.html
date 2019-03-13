@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Demo开发页</title>
+
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="Publish_Time" content="2018-08-15 14:35:59" />
+
+  <link rel="stylesheet" type="text/css" href="/res3rd/js/layui/css/layui.css">
+  <link rel="stylesheet" type="text/css" href="/res/css/comm.css">
+
+  <script src="/res3rd/js/jquery/jquery-3.0.0.min.js"></script>
+
+  <script src="/res3rd/js/tool/tool.js" ></script>
+  <script src="/res3rd/js/tool/date.format.js" ></script>
+
+  <style>
+    .layui-form-select dl { max-height:100px; }
+  </style>
+</head>
+<body>
+<div class="layui-tab-content">
+  <div class="layui-tab-item layui-show">      <br/>
+    <span class="layui-breadcrumb" lay-separator=">">
+        <a href="">系统管理</a>
+        <a href="">管理员列表</a>
+      </span>
+    <br/>
+
+    <!-- 管理列表 -->
+    <div id="divList">
+      <fieldset class="layui-elem-field layui-field-title" >
+        <legend>管理员列表</legend>
+        <div class="layui-row">
+          <form class="layui-form" action="" id="formQuery">
+            <div class="layui-input-inline" style="width: 140px;">
+              <select id="status">
+                <option value="" selected="">账号状态</option>
+                <option value="1">正常</option>
+                <option value="2">冻结</option>
+                <option value="3">离职</option>
+              </select>
+            </div>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;创建时间：
+            <div class="layui-inline">
+              <input class="layui-input" id="dateStart" name="dateStart" autocomplete="off" style="width: 120px;" placeholder="起始日期" />
+            </div>
+            -
+            <div class="layui-inline">
+              <input class="layui-input" id="dateEnd" name="dateEnd" autocomplete="off" style="width: 120px;" placeholder="结束日期"/>
+            </div>
+            &nbsp;&nbsp;
+            <div class="layui-inline">
+              <input class="layui-input" id="realName"  name="realName" autocomplete="off" style="width: 140px;" placeholder="用户姓名"/>
+            </div>
+            &nbsp;&nbsp;
+            <div class="layui-inline">
+              <input class="layui-input" id="mobile"  name="mobile" autocomplete="off" style="width: 140px;" placeholder="手机号"/>
+            </div>
+            &nbsp;&nbsp;
+            <button class="layui-btn layui-btn-primary" id="btnSearch">搜索</button>
+            <button class="layui-btn layui-btn-primary layui-inline" id="btnClear">清空</button>
+            <input type="button" class="layui-btn layui-btn-ruibao layui-inline" onClick="UI.addOperator()" value="添加管理员"/>
+          </form>
+        </div>
+
+        <table id="demoTable" lay-filter="demoTable">
+        </table>
+
+        <script type="text/html" id="dlGmtCreate">
+          {{= d.gmtCreate? new DateFormat().format(new Date(d.gmtCreate), 'yyyy-MM-dd HH:mm:ss'):'' }}
+        </script>
+        <script type="text/html" id="dlStatus">
+          {{= UI.getStatusDesc(d.status) }}
+        </script>
+        <script type="text/html" id="dlOpt">
+          {{#  if(d.status == '2'){ }}
+          <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                  data-entity="{{= JSON.stringify(d) }}"
+                  data-id="{{d.rid}}"
+                  type="button" onclick="UI.freeze(this);">解冻</button>
+          {{#  }else if(d.status == '1'){ }}
+          <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                  data-entity="{{= JSON.stringify(d) }}"
+                  data-id="{{d.rid}}"
+                  type="button" onclick="UI.showModifyPopup(this);">修改</button>
+          <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                  data-entity="{{= JSON.stringify(d) }}"
+                  data-id="{{d.rid}}"
+                  type="button" onclick="UI.thawing(this);">冻结</button>
+          <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                  data-entity="{{= JSON.stringify(d) }}"
+                  data-id="{{d.rid}}"
+                  type="button" onclick="UI.leaveOffice(this);">离职</button>
+          {{#  } else if(d.status == '3'){ }}
+          <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                  data-entity="{{= JSON.stringify(d) }}"
+                  data-id="{{d.rid}}"
+                  type="button" onclick="UI.del(this);">删除</button>
+          {{#  } }}
+        </script>
+
+      </fieldset>
+    </div>
+
+    <!-- 增加管理员弹框 -->
+
+    <!-- 增加管理员弹框 -->
+    <div id="divCreate" style="display: none;">
+      <div class="layui-field-box">
+        <form class="layui-form" action="" id="formCreate">
+          <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+              <input type="text"  placeholder="输入管理员真实姓名" lay-verify="required"  autocomplete="off" class="layui-input" name="realName">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+              <input type="text" maxlength="11" placeholder="输入手机号" lay-verify="phone" autocomplete="off" class="layui-input" name="mobile">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+              <input type="password"  minlength="6" placeholder="初始密码" lay-verify="required" autocomplete="off" class="layui-input" name="password" id="password">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">操作员角色</label>
+            <div class="layui-input-inline">
+              <select id="roleSelect" name="roleId" name="modules" lay-verify="required" lay-search="">
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-input-block">
+              <input type="hidden" name="rid"/>
+              <button class="layui-btn wd120" type="button" lay-submit lay-filter="sbtnCreate">确认</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- 修改管理员弹框 -->
+    <div id="divModify" style="display: none;">
+      <div class="layui-field-box">
+        <form class="layui-form" action="" id="formModify">
+          <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+              <input type="text" placeholder="输入管理员真实姓名" lay-verify="required"  autocomplete="off" class="layui-input" name="realName">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+              <input type="text" maxlength="11" placeholder="输入手机号" lay-verify="phone" autocomplete="off" class="layui-input" name="mobile" readonly="readonly">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-inline">
+              <input type="password" minlength="6" placeholder="密码" autocomplete="off" class="layui-input" name="newPasswd">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">操作员角色</label>
+            <div class="layui-input-inline">
+              <select id="uRoleSelect" name="roleId" name="modules" lay-verify="required" lay-search="">
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-input-block">
+              <input type="hidden" name="rid"/>
+              <button class="layui-btn wd120" type="button" lay-submit lay-filter="sbtnModify">确认修改</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div> </body>
+<script src="/res3rd/js/layui/layui.js"></script>
+<script src="/res/js/pre.js"></script>
+
+<script>
+    layui.config({
+        base: '/res/js/'
+    }).use('operator'); //加载入口
+
+</script>
+<script src="/res/js/config.js"></script>
+<script src="/res/js/operator.js"></script>
+</html>

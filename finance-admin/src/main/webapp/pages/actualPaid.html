@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>实付数据</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="Publish_Time" content="2018-08-15 14:35:59" />
+
+    <link rel="stylesheet" type="text/css" href="/res3rd/js/layui/css/layui.css">
+
+    <script src="/res3rd/js/jquery/jquery-3.0.0.min.js"></script>
+
+
+    <style>
+    </style>
+</head>
+<body>
+<div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+    <br/>
+    <span class="layui-breadcrumb" lay-separator=">">
+        <a href="">财务管理</a>
+        <a href="">实付管理</a>
+      </span>
+    <br/>
+
+    <!-- 管理列表 -->
+    <div id="divList">
+        <fieldset class="layui-elem-field layui-field-title" >
+            <legend>实付列表</legend>
+            <div class="layui-row">
+                <form class="layui-form" action="" id="formQuery">
+
+                    <div id="btnSearchDivWhere" style="float:left"  hidden>
+                       &nbsp;&nbsp;
+                       <div class="layui-inline">
+                           <input class="layui-input" id="borrowNo"  name="borrowNo" autocomplete="off" style="width: 140px;" placeholder="借款编号"/>
+                       </div>
+                       &nbsp;&nbsp;
+                       <div class="layui-inline" style="width: 140px;">
+                           <select id="liquidationCompany">
+                               <option value="" selected="">清算公司</option>
+                               <option value="爱上街">爱上街</option>
+                               <option value="绿游">绿游</option>
+                               <option value="易港">易港</option>
+                           </select>
+                       </div>
+
+                       <div class="layui-inline" style="width: 140px;">
+                           <select id="productType">
+                               <option value="" selected="">产品类型</option>
+                               <option value="现金贷">现金贷</option>
+                               <option value="消费分期">消费分期</option>
+                               <option value="现金分期">现金分期</option>
+                           </select>
+                       </div>
+                   </div>
+
+                    <div id="btnExportDivWhere" class="btnSearchDivWhere" style="float:left"  hidden>
+                        &nbsp;&nbsp;&nbsp;&nbsp;实际付款时间：
+
+                        <div class="layui-inline">
+                            <input class="layui-input" id="gmtStart" name="gmtStart" autocomplete="off" style="width: 120px;" placeholder="起始日期" />
+                        </div>
+                        -
+                        <div class="layui-inline">
+                            <input class="layui-input" id="gmtEnd" name="gmtEnd" autocomplete="off" style="width: 120px;" placeholder="结束日期"/>
+                        </div>
+                        <button class="layui-btn layui-btn-danger" id="btnClear">重置</button>
+                        &nbsp;&nbsp;
+                    </div>
+                    <div id="btnSearchDiv" style="float:left"  hidden>
+                        <button class="layui-btn layui-btn-normal" id="btnSearch">查询</button>
+                    </div>
+                    <div id="btnExportDiv" style="float:left"  hidden>
+                        &nbsp;&nbsp;
+                        <button class="layui-btn layui-btn-ruibao" id="btnExport" onClick="API.Export()">导出</button>
+                    </div>
+                </form>
+            </div>
+
+
+            <table id="actualPaidTable" lay-filter="actualPaidTable">
+            </table>
+
+        </fieldset>
+    </div>
+</div>
+</div>
+</body>
+<script src="/res3rd/js/layui/layui.js"></script>
+<script src="/res/js/pre.js"></script>
+
+<script>
+    layui.config({
+        base: '/res/js/'
+    }).use('actualPaid'); //加载入口
+</script>
+<script src="/res/js/config.js"></script>
+</html>

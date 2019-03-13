@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fin_user_account表 -->
+<mapper namespace="com.cx.finance.dal.dao.FinUserAccountDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,gmt_create,gmt_modified,amount,user_id,total_amount,total_repay_amount
+    </sql>
+    <sql id="queryAllFields">
+        ua.id rid,ua.gmt_create,ua.gmt_modified,ua.amount,ua.user_id,ua.total_amount,ua.total_repay_amount
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="gmtModified !=null">
+            AND gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        </if>
+        <if test="amount != null">
+            AND amount = #{amount,jdbcType=DECIMAL}
+        </if>
+        <if test="userId != null">
+            AND user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="totalAmount != null">
+            AND total_amount = #{totalAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="totalRepayAmount != null">
+            AND total_repay_amount = #{totalRepayAmount,jdbcType=DECIMAL}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="FinUserAccountDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO fin_user_account
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="gmtCreate != null">        
+	            gmt_create,
+	        </if>
+	        <if test="gmtModified != null">        
+	            gmt_modified,
+	        </if>
+	        <if test="amount != null">        
+	            amount,
+	        </if>
+	        <if test="userId != null">        
+	            user_id,
+	        </if>
+	        <if test="totalAmount != null">        
+	            total_amount,
+	        </if>
+	        <if test="totalRepayAmount != null">
+	            total_repay_amount,
+	        </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="gmtCreate != null" >
+		       #{gmtCreate,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="gmtModified != null" >
+		       #{gmtModified,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="amount != null" >
+		       #{amount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="userId != null" >
+		       #{userId,jdbcType=INTEGER},
+		    </if>
+		    <if test="totalAmount != null" >
+		       #{totalAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="totalRepayAmount != null" >
+		       #{totalRepayAmount,jdbcType=DECIMAL},
+		    </if>
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="FinUserAccountDo">
+        UPDATE fin_user_account
+          <set>
+            <if test="amount != null">        
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="userId != null">        
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="totalAmount != null">        
+                total_amount = #{totalAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="totalRepayamount != null">        
+                total_repay_amount = #{totalRepayAmount,jdbcType=DECIMAL},
+            </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="FinUserAccountDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user_account
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="FinUserAccountDo" parameterType="FinUserAccountDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user_account
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="FinUserAccountDo" parameterType="FinUserAccountDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user_account
+        <include refid="commonCondition"/>
+    </select>
+
+    <update id="updateOutAccountByUserId"  parameterType="FinUserAccountDo">
+        UPDATE fin_user_account
+        <set>
+            <if test="totalAmount != null">
+                total_amount =total_amount-#{totalAmount,jdbcType=DECIMAL},
+            </if>
+            gmt_modified = NOW()
+        </set>
+        WHERE is_delete = 0 AND user_id = #{userId}
+    </update>
+
+    <update id="updateInAccountByUserId"  parameterType="FinUserAccountDo">
+        UPDATE fin_user_account
+        <set>
+            <if test="totalAmount != null">
+                total_amount =total_amount+#{totalAmount,jdbcType=DECIMAL},
+            </if>
+            gmt_modified = NOW()
+        </set>
+        WHERE is_delete = 0 AND user_id = #{userId}
+    </update>
+
+    <select id="getByUserId" resultType="FinUserAccountDo" parameterType="Long">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_user_account
+        WHERE is_delete = 0 AND user_id=#{userId}
+        limit 0,1
+    </select>
+
+    <select id="getByMobile" resultType="FinUserAccountDo" parameterType="String">
+        SELECT
+        <include refid="queryAllFields" />
+        FROM fin_user_account ua JOIN fin_user u ON ua.user_id=u.id
+        WHERE ua.is_delete = 0  AND u.mobile=#{mobile}
+        limit 1
+    </select>
+
+
+</mapper>

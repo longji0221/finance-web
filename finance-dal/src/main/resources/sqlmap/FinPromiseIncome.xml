@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fin_promise_income表 -->
+<mapper namespace="com.cx.finance.dal.dao.FinPromiseIncomeDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,gmt_create,gmt_modified,borrow_no,periods,gmt_plan_repay,predict_amount,repay_amount,none_amount,amount,reta_amount,poundage_amount,overdue_amount,shop_amount,status,product_type,product_name,liquidation_company,remark
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="gmtModified !=null">
+            AND gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        </if>
+        <if test="borrowNo != null">
+            AND borrow_no = #{borrowNo,jdbcType=VARCHAR}
+        </if>
+        <if test="periods != null">
+            AND periods = #{periods,jdbcType=INTEGER}
+        </if>
+        <if test="gmtPlanRepay !=null">
+            AND gmt_plan_repay = #{gmtPlanRepay,jdbcType=TIMESTAMP}
+        </if>
+        <if test="predictAmount != null">
+            AND predict_amount = #{predictAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="repayAmount != null">
+            AND repay_amount = #{repayAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="noneAmount != null">
+            AND none_amount = #{noneAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="amount != null">
+            AND amount = #{amount,jdbcType=DECIMAL}
+        </if>
+        <if test="retaAmount != null">
+            AND reta_amount = #{retaAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="poundageAmount != null">
+            AND poundage_amount = #{poundageAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="overdueAmount != null">
+            AND overdue_amount = #{overdueAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="shopAmount != null">
+            AND shop_amount = #{shopAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="status != null">
+            AND status = #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="liquidationCompany != null">
+            AND liquidation_company = #{liquidationCompany,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null">
+            AND remark = #{remark,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="FinPromiseIncomeDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO fin_promise_income
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="gmtCreate != null">        
+	            gmt_create,
+	        </if>
+	        <if test="gmtModified != null">        
+	            gmt_modified,
+	        </if>
+	        <if test="borrowNo != null">        
+	            borrow_no,
+	        </if>
+	        <if test="periods != null">        
+	            periods,
+	        </if>
+	        <if test="gmtPlanRepay != null">        
+	            gmt_plan_repay,
+	        </if>
+	        <if test="predictAmount != null">        
+	            predict_amount,
+	        </if>
+	        <if test="repayAmount != null">        
+	            repay_amount,
+	        </if>
+	        <if test="noneAmount != null">        
+	            none_amount,
+	        </if>
+	        <if test="amount != null">        
+	            amount,
+	        </if>
+	        <if test="retaAmount != null">        
+	            reta_amount,
+	        </if>
+	        <if test="poundageAmount != null">        
+	            poundage_amount,
+	        </if>
+	        <if test="overdueAmount != null">        
+	            overdue_amount,
+	        </if>
+	        <if test="shopAmount != null">        
+	            shop_amount,
+	        </if>
+	        <if test="status != null">        
+	            status,
+	        </if>
+	        <if test="liquidationCompany != null">        
+	            liquidation_company,
+	        </if>
+	        <if test="remark != null">        
+	            remark,
+	        </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="gmtCreate != null" >
+		       #{gmtCreate,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="gmtModified != null" >
+		       #{gmtModified,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="borrowNo != null" >
+		       #{borrowNo,jdbcType=VARCHAR},
+		    </if>
+		    <if test="periods != null" >
+		       #{periods,jdbcType=INTEGER},
+		    </if>
+		    <if test="gmtPlanRepay != null" >
+		       #{gmtPlanRepay,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="predictAmount != null" >
+		       #{predictAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="repayAmount != null" >
+		       #{repayAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="noneAmount != null" >
+		       #{noneAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="amount != null" >
+		       #{amount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="retaAmount != null" >
+		       #{retaAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="poundageAmount != null" >
+		       #{poundageAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="overdueAmount != null" >
+		       #{overdueAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="shopAmount != null" >
+		       #{shopAmount,jdbcType=DECIMAL},
+		    </if>
+		    <if test="status != null" >
+		       #{status,jdbcType=VARCHAR},
+		    </if>
+		    <if test="liquidationCompany != null" >
+		       #{liquidationCompany,jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null" >
+		       #{remark,jdbcType=VARCHAR},
+		    </if>
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="FinPromiseIncomeDo">
+        UPDATE fin_promise_income
+          <set>
+            <if test="borrowNo != null">        
+                borrow_no = #{borrowNo,jdbcType=VARCHAR},
+            </if>
+            <if test="periods != null">        
+                periods = #{periods,jdbcType=INTEGER},
+            </if>
+            <if test="gmtPlanRepay != null">        
+                gmt_plan_repay = #{gmtPlanRepay,jdbcType=TIMESTAMP},
+            </if>
+            <if test="predictAmount != null">        
+                predict_amount = #{predictAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="repayAmount != null">        
+                repay_amount = #{repayAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="noneAmount != null">        
+                none_amount = #{noneAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="amount != null">        
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="retaAmount != null">        
+                reta_amount = #{retaAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="poundageAmount != null">        
+                poundage_amount = #{poundageAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="overdueAmount != null">        
+                overdue_amount = #{overdueAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="shopAmount != null">        
+                shop_amount = #{shopAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">        
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="liquidationCompany != null">        
+                liquidation_company = #{liquidationCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">        
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="FinPromiseIncomeDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_promise_income
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="FinPromiseIncomeDo" parameterType="FinPromiseIncomeDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_promise_income
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="FinPromiseIncomeDo" parameterType="FinPromiseIncomeDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_promise_income
+        <include refid="commonCondition"/>
+    </select>
+
+
+    <select id="getListByQuery" resultType="FinPromiseIncomeDo" parameterType="com.cx.finance.dal.query.PromiseIncomeQuery">
+        SELECT
+        <include refid="queryFields" />
+        FROM fin_promise_Income
+        WHERE is_delete = 0
+        <if test="borrowNo != null and borrowNo != '' ">
+            AND borrow_no = #{borrowNo}
+        </if>
+        <if test="liquidationCompany != null and liquidationCompany != ''">
+            AND liquidation_company = #{liquidationCompany}
+        </if>
+        <if test="gmtStart != null and gmtStart != ''">
+            AND
+            <![CDATA[gmt_plan_repay >= CONCAT(DATE_FORMAT(#{gmtStart},'%Y-%m-%d')," 00:00:00")]]>
+        </if>
+        <if test="gmtEnd != null and gmtEnd != ''">
+            AND
+            <![CDATA[gmt_plan_repay <= CONCAT(DATE_FORMAT(#{gmtEnd},'%Y-%m-%d')," 23:59:59")]]>
+        </if>
+        ORDER BY gmt_plan_repay DESC
+    </select>
+
+    <insert id="batchinsert" parameterType="list">
+        insert into fin_promise_Income (gmt_create,gmt_modified,borrow_no,periods,gmt_plan_repay,predict_amount,repay_amount,none_amount,amount,reta_amount,poundage_amount,overdue_amount,shop_amount,status,product_type,product_name,liquidation_company) values
+        <foreach item="item" collection="list" separator=",">
+            ( now(),now(),
+            #{item.borrowNo}, #{item.periods}, #{item.gmtPlanRepay}, #{item.predictAmount}, #{item.repayAmount},
+            #{item.noneAmount},#{item.amount}, #{item.retaAmount}, #{item.poundageAmount},#{item.overdueAmount}, #{item.shopAmount},
+            #{item.status},#{item.productType},#{item.productName},#{item.liquidationCompany}
+            )
+        </foreach>
+    </insert>
+</mapper>

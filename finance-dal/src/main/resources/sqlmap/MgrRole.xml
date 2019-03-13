@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mgr_role表 -->
+<mapper namespace="com.cx.finance.dal.dao.MgrRoleDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,gmt_create,gmt_modified,creator,modifier,role_type,role_name,province,city,area,remark ,status
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="gmtModified !=null">
+            AND gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        </if>
+        <if test="creator != null">
+            AND creator = #{creator,jdbcType=VARCHAR}
+        </if>
+        <if test="modifier != null">
+            AND modifier = #{modifier,jdbcType=VARCHAR}
+        </if>
+        <if test="roleType != null">
+            AND role_type = #{roleType,jdbcType=INTEGER}
+        </if>
+        <if test="roleName != null">
+            AND role_name = #{roleName,jdbcType=VARCHAR}
+        </if>
+        <if test="province != null">
+            AND province = #{province,jdbcType=VARCHAR}
+        </if>
+        <if test="city != null">
+            AND city = #{city,jdbcType=VARCHAR}
+        </if>
+        <if test="area != null">
+            AND area = #{area,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="MgrRoleDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO mgr_role
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="gmtCreate != null">        
+	            gmt_create,
+	        </if>
+	        <if test="gmtModified != null">        
+	            gmt_modified,
+	        </if>
+	        <if test="creator != null">        
+	            creator,
+	        </if>
+	        <if test="modifier != null">        
+	            modifier,
+	        </if>
+	        <if test="roleType != null">        
+	            role_type,
+	        </if>
+	        <if test="roleName != null">        
+	            role_name,
+	        </if>
+	        <if test="province != null">        
+	            province,
+	        </if>
+	        <if test="city != null">        
+	            city,
+	        </if>
+	        <if test="area != null">        
+	            area,
+	        </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="gmtCreate != null" >
+		       #{gmtCreate,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="gmtModified != null" >
+		       #{gmtModified,jdbcType=TIMESTAMP},
+		    </if>
+		    <if test="creator != null" >
+		       #{creator,jdbcType=VARCHAR},
+		    </if>
+		    <if test="modifier != null" >
+		       #{modifier,jdbcType=VARCHAR},
+		    </if>
+		    <if test="roleType != null" >
+		       #{roleType,jdbcType=INTEGER},
+		    </if>
+		    <if test="roleName != null" >
+		       #{roleName,jdbcType=VARCHAR},
+		    </if>
+		    <if test="province != null" >
+		       #{province,jdbcType=VARCHAR},
+		    </if>
+		    <if test="city != null" >
+		       #{city,jdbcType=VARCHAR},
+		    </if>
+		    <if test="area != null" >
+		       #{area,jdbcType=VARCHAR},
+		    </if>
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="MgrRoleDo">
+        UPDATE mgr_role
+          <set>
+            <if test="creator != null">        
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="modifier != null">        
+                modifier = #{modifier,jdbcType=VARCHAR},
+            </if>
+            <if test="roleType != null">        
+                role_type = #{roleType,jdbcType=INTEGER},
+            </if>
+            <if test="roleName != null">        
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">        
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">        
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">        
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                  remark=#{remark},
+            </if>
+              <if test="status != null">
+                  status=#{status},
+              </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="MgrRoleDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_role
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="MgrRoleDo" parameterType="MgrRoleDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_role
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="MgrRoleDo" parameterType="MgrRoleDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_role
+        <include refid="commonCondition"/>
+    </select>
+
+
+    <select id="getRole" resultType="MgrRoleDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_role
+        WHERE  is_delete = 0 AND status='0'
+        ORDER BY id DESC
+    </select>
+
+    <select id="getRoleList" resultType="MgrRoleDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_role
+        WHERE  is_delete = 0
+        <if test="roleName != null and roleName.trim() != ''">
+            AND role_name = #{roleName}
+        </if>
+        <if test="status != null and status.trim() != ''">
+            AND status= #{status}
+        </if>
+        <if test="gmtStart != null">
+            AND gmt_create &gt;= #{gmtStart}
+        </if>
+        <if test="gmtEnd != null">
+            AND gmt_create &lt;= #{gmtEnd}
+        </if>
+        ORDER BY id DESC
+    </select>
+
+</mapper>

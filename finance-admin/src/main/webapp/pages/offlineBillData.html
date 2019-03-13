@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线下入账数据开发页</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="Publish_Time" content="2018-08-15 14:35:59" />
+
+    <link rel="stylesheet" type="text/css" href="/res3rd/js/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="/res/css/comm.css">
+
+    <script src="/res3rd/js/jquery/jquery-3.0.0.min.js"></script>
+
+    <script src="/res3rd/js/tool/tool.js" ></script>
+    <script src="/res3rd/js/tool/date.format.js" ></script>
+
+    <style>
+    </style>
+</head>
+<body>
+<div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+    <br/>
+    <span class="layui-breadcrumb" lay-separator=">">
+        <a href="">财务管理</a>
+        <a href="">线下入账数据</a>
+      </span>
+    <br/>
+
+    <!-- 线下入账数据 -->
+    <div id="divList">
+        <fieldset class="layui-elem-field layui-field-title" >
+            <legend>线下入账数据</legend>
+            <div class="layui-row">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <form class="layui-form" action="" id="formQuery">
+                    <div id="btnSearchDivWhere" class="btnExportDivWhere" style="float:left"  hidden>
+                       &nbsp;&nbsp;&nbsp;&nbsp;入账时间段：
+                       <div class="layui-inline">
+                           <input class="layui-input" id="dateStart" name="dateStart" autocomplete="off" style="width: 150px;" placeholder="起始日期" />
+                       </div>
+                       -
+                       <div class="layui-inline">
+                           <input class="layui-input" id="dateEnd" name="dateEnd" autocomplete="off" style="width: 150px;" placeholder="结束日期"/>
+                       </div>
+                        &nbsp;&nbsp;支付宝账户：
+                        <div class="layui-inline" style="width: 120px;">
+                            <select id="benefitAccount">
+                            </select>
+                        </div>
+                        &nbsp;&nbsp;
+                       <button class="layui-btn layui-btn-danger" id="btnClear">重置</button>
+                       &nbsp;&nbsp;
+                   </div>
+                    <div id="btnSearchDiv" style="float:left"  hidden>
+                        <button class="layui-btn layui-btn-normal" id="btnSearch">查询</button>
+                        &nbsp;&nbsp;
+                    </div>
+                    <div id="btnExportDiv" style="float:left"  hidden>
+                        <button class="layui-btn layui-btn-ruibao" id="btnExport" onClick="API.Export()">导出</button>
+                    </div>
+                </form>
+            </div>
+
+            <table id="billTable" lay-filter="billTable">
+            </table>
+        </fieldset>
+    </div>
+</div>
+</div>
+</body>
+<script src="/res3rd/js/layui/layui.js"></script>
+<script src="/res/js/pre.js"></script>
+
+<script>
+    layui.config({
+        base: '/res/js/'
+    }).use('offlineBillData'); //加载入口
+</script>
+<script src="/res/js/config.js"></script>
+</html>

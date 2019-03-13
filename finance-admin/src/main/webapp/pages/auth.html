@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<title>Demo开发页</title>
+
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="Publish_Time" content="2018-08-15 14:35:59" />
+
+  	<link rel="stylesheet" type="text/css" href="/res3rd/js/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="/res3rd/js/layui/css/zTreeStyle.css">
+    <link rel="stylesheet" type="text/css" href="/res/css/comm.css">
+
+  	<script src="/res3rd/js/jquery/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript" src="/res3rd/js/jquery/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="/res3rd/js/jquery/jquery.ztree.excheck.js"></script>
+    <script src="/res3rd/js/tool/tool.js" ></script>
+    <script src="/res3rd/js/tool/date.format.js" ></script>
+
+  	<style>
+  	</style>
+  </head>
+  <body>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">      <br/>
+      <span class="layui-breadcrumb" lay-separator=">">
+        <a href="">系统管理</a>
+        <a href="">角色列表</a>
+      </span>
+      <br/>
+
+      <!-- 管理列表 -->
+      <div id="divList">
+        <fieldset class="layui-elem-field layui-field-title" >
+          <legend>角色列表</legend>
+          <div class="layui-row">
+            <form class="layui-form" action="" id="formQuery">
+              &nbsp;&nbsp;
+              <div class="layui-inline">
+                <input class="layui-input" id="roleName"  name="roleName" autocomplete="off" style="width: 140px;" placeholder="角色"/>
+              </div>
+
+              &nbsp;&nbsp;&nbsp;&nbsp;创建时间：
+              <div class="layui-inline">
+                <input class="layui-input" id="dateStart" name="dateStart" autocomplete="off" style="width: 120px;" placeholder="起始日期" />
+              </div>
+              -
+              <div class="layui-inline">
+                <input class="layui-input" id="dateEnd" name="dateEnd" autocomplete="off" style="width: 120px;" placeholder="结束日期"/>
+              </div>
+              &nbsp;&nbsp;
+              <div class="layui-input-inline" style="width: 140px;">
+                <select id="status">
+                  <option value="">状态</option>
+                  <option value="1">禁用</option>
+                  <option value="0">正常</option>
+                </select>
+              </div>
+              &nbsp;&nbsp;
+              <button class="layui-btn layui-btn-primary" id="btnSearch">搜索</button>
+              <button class="layui-btn layui-btn-primary" id="btnClear">清空</button>
+              <input type="button" class="layui-btn layui-btn-ruibao layui-inline" ONCLICK="UI.addRole()" value="添加角色"/>
+            </form>
+          </div>
+
+          <table id="roleTable" lay-filter="roleTable">
+          </table>
+
+          <script type="text/html" id="dlOpt">
+            {{#  if(d.status == '1'){ }}
+             <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                    data-entity="{{= JSON.stringify(d) }}"
+                    data-id="{{d.rid}}"
+                    type="button" onclick="UI.freeze(this);">解禁</button>
+            {{#  }else if(d.status == '0'){ }}
+            <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                    data-entity="{{= JSON.stringify(d) }}"
+                    data-id="{{d.rid}}"
+                    type="button" onclick="UI.showModifyPopup(this);">编辑</button>
+            <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                    data-entity="{{= JSON.stringify(d) }}"
+                    data-id="{{d.rid}}"
+                    type="button" onclick="UI.thawing(this);">禁用</button>
+            <button class="layui-btn layui-btn-ruibao layui-btn-sm"
+                    data-entity="{{= JSON.stringify(d) }}"
+                    data-id="{{d.rid}}"
+                    type="button"  onclick="UI.auth(this)">权限管理</button>
+
+            {{#  } else if(d.status == '3'){ }}
+
+            {{#  } }}
+          </script>
+          <script type="text/html" id="dlStatus">
+            {{#  if(d.status == '1'){ }}禁用
+            {{#  }else if(d.status == '0'){ }}正常
+            {{#  } else if(d.status == '3'){ }}
+
+            {{#  } }}
+          </script>
+
+        </fieldset>
+      </div>
+
+      <!-- 增加管理员弹框 -->
+      <div id="divCreate" style="display: none;">
+        <div class="layui-field-box">
+          <form class="layui-form" action="" id="formCreate">
+            <div class="layui-form-item">
+              <label class="layui-form-label">角色名称</label>
+              <div class="layui-input-inline">
+                <input type="text"  placeholder="输入角色" lay-verify="required"  autocomplete="off" class="layui-input" name="roleName" id="addRoleName">
+              </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">角色描述</label>
+              <div class="layui-input-inline">
+                <textarea id="remark" name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <input type="hidden" name="rid"/>
+                <button class="layui-btn wd120" type="button" lay-submit lay-filter="sbtnCreate">确认</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+      <div id="menuAuth" style="display: none;">
+        <br> &nbsp;&nbsp; &nbsp;&nbsp;
+        <button class="layui-btn layui-btn-primary" id="allCheck">全选</button>
+        <button class="layui-btn layui-btn-primary" id="allNoCheck">全不选</button>
+        <button class="layui-btn layui-btn-primary" id="allOpen">展开所有</button>
+        <button class="layui-btn layui-btn-primary" id="allClose">收起所有</button><br>
+        &nbsp;&nbsp; &nbsp;&nbsp; <ul id="authTree" class="ztree"></ul>
+      </div>
+
+      <!-- 修改 -->
+      <div id="divModify" style="display: none;">
+          <div class="layui-field-box">
+            <form class="layui-form" action="" id="formModify">
+                <div class="layui-form-item">
+                  <label class="layui-form-label">角色名称</label>
+                  <div class="layui-input-inline">
+                    <input type="text" id="updateRoleName" placeholder="输入角色" lay-verify="required"  autocomplete="off" class="layui-input" name="roleName">
+                  </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                  <label class="layui-form-label">角色描述</label>
+                  <div class="layui-input-inline">
+                    <textarea id="updateRemark" name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                  </div>
+                </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <input type="hidden" name="rid" id="updateRid"/>
+                  <button class="layui-btn" type="button" lay-submit lay-filter="sbtnModify">确认修改</button>
+                </div>
+              </div>
+            </form>
+          </div>
+      </div>
+
+    </div>
+  </div> </body>
+  <script src="/res3rd/js/layui/layui.js"></script>
+  <script src="/res/js/pre.js"></script>
+
+  <script>
+    layui.config({
+      base: '/res/js/'
+    }).use('role'); //加载入口
+
+  </script>
+</html>

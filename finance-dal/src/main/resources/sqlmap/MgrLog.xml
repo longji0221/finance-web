@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mgr_log表 -->
+<mapper namespace="com.cx.finance.dal.dao.MgrLogDao">
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="queryFields">
+        id rid,user_id,username,operation,time,method,params,ip,gmt_create 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="commonCondition">
+    	WHERE is_delete = 0
+        <if test="rid !=null">
+            AND id  = #{rid,jdbcType=INTEGER}
+        </if>
+        <if test="userId != null">
+            AND user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="username != null">
+            AND username = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="operation != null">
+            AND operation = #{operation,jdbcType=VARCHAR}
+        </if>
+        <if test="time != null">
+            AND time = #{time,jdbcType=INTEGER}
+        </if>
+        <if test="method != null">
+            AND method = #{method,jdbcType=VARCHAR}
+        </if>
+        <if test="params != null">
+            AND params = #{params,jdbcType=VARCHAR}
+        </if>
+        <if test="ip != null">
+            AND ip = #{ip,jdbcType=VARCHAR}
+        </if>
+        <if test="gmtCreate !=null">
+            AND gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        </if>
+    </sql>
+
+    
+    <insert id="saveRecord" parameterType="MgrLogDo" keyProperty="rid" useGeneratedKeys="true">
+        INSERT INTO mgr_log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="userId != null">        
+	            user_id,
+	        </if>
+	        <if test="username != null">        
+	            username,
+	        </if>
+	        <if test="operation != null">        
+	            operation,
+	        </if>
+	        <if test="time != null">        
+	            time,
+	        </if>
+	        <if test="method != null">        
+	            method,
+	        </if>
+	        <if test="params != null">        
+	            params,
+	        </if>
+	        <if test="ip != null">        
+	            ip,
+	        </if>
+	        <if test="gmtCreate != null">        
+	            gmt_create,
+	        </if>
+        </trim>
+        
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="userId != null" >
+		       #{userId,jdbcType=INTEGER},
+		    </if>
+		    <if test="username != null" >
+		       #{username,jdbcType=VARCHAR},
+		    </if>
+		    <if test="operation != null" >
+		       #{operation,jdbcType=VARCHAR},
+		    </if>
+		    <if test="time != null" >
+		       #{time,jdbcType=INTEGER},
+		    </if>
+		    <if test="method != null" >
+		       #{method,jdbcType=VARCHAR},
+		    </if>
+		    <if test="params != null" >
+		       #{params,jdbcType=VARCHAR},
+		    </if>
+		    <if test="ip != null" >
+		       #{ip,jdbcType=VARCHAR},
+		    </if>
+		    <if test="gmtCreate != null" >
+		       #{gmtCreate,jdbcType=TIMESTAMP},
+		    </if>
+        </trim>
+    </insert>
+    
+    <update id="updateById"  parameterType="MgrLogDo">
+        UPDATE mgr_log
+          <set>
+            <if test="userId != null">        
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">        
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="operation != null">        
+                operation = #{operation,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">        
+                time = #{time,jdbcType=INTEGER},
+            </if>
+            <if test="method != null">        
+                method = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="params != null">        
+                params = #{params,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">        
+                ip = #{ip,jdbcType=VARCHAR},
+            </if>
+            gmt_modified = NOW()
+        </set>    
+        WHERE is_delete = 0 AND id = #{rid ,jdbcType=BIGINT}
+    </update>
+
+	<select id="getById" resultType="MgrLogDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_log
+        WHERE is_delete = 0 AND id=#{rid ,jdbcType=BIGINT}
+        LIMIT 0,1
+    </select>
+
+	<select id="getByCommonCondition" resultType="MgrLogDo" parameterType="MgrLogDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_log
+        <include refid="commonCondition"/> 
+        limit 0,1
+    </select>
+               
+    <select id="getListByCommonCondition" resultType="MgrLogDo" parameterType="MgrLogDo">
+        SELECT
+        <include refid="queryFields" />
+        FROM mgr_log
+        <include refid="commonCondition"/>
+    </select>
+
+    <select id="list" resultType="MgrLogDo">
+        select `id`,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create` from mgr_log
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+            <if test="username != null and username != ''"> and username = #{username} </if>
+            <if test="operation != null and operation != ''"> and operation = #{operation} </if>
+            <if test="time != null and time != ''"> and time = #{time} </if>
+            <if test="method != null and method != ''"> and method = #{method} </if>
+            <if test="params != null and params != ''"> and params = #{params} </if>
+            <if test="ip != null and ip != ''"> and ip = #{ip} </if>
+            <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="listByQueruy" parameterType="com.cx.finance.dal.query.MgrLogQuery" resultType="MgrLogDo">
+        select `id` rid,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create` from mgr_log
+        <where>
+            <if test="userName != null and userName != ''"> and username = #{userName} </if>
+            <if test="operation != null and operation != ''"> and operation = #{operation} </if>
+        </where>
+        order by gmt_create DESC
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from mgr_log
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+            <if test="username != null and username != ''"> and username = #{username} </if>
+            <if test="operation != null and operation != ''"> and operation = #{operation} </if>
+            <if test="time != null and time != ''"> and time = #{time} </if>
+            <if test="method != null and method != ''"> and method = #{method} </if>
+            <if test="params != null and params != ''"> and params = #{params} </if>
+            <if test="ip != null and ip != ''"> and ip = #{ip} </if>
+            <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="MgrLogDo" useGeneratedKeys="true" keyProperty="id">
+        insert into mgr_log
+        (
+        `user_id`,
+        `username`,
+        `operation`,
+        `time`,
+        `method`,
+        `params`,
+        `ip`,
+        `gmt_create`
+        )
+        values
+        (
+        #{userId},
+        #{username},
+        #{operation},
+        #{time},
+        #{method},
+        #{params},
+        #{ip},
+        #{gmtCreate}
+        )
+    </insert>
+
+    <update id="update" parameterType="MgrLogDo">
+        update mgr_log
+        <set>
+            <if test="userId != null">`user_id` = #{userId}, </if>
+            <if test="username != null">`username` = #{username}, </if>
+            <if test="operation != null">`operation` = #{operation}, </if>
+            <if test="time != null">`time` = #{time}, </if>
+            <if test="method != null">`method` = #{method}, </if>
+            <if test="params != null">`params` = #{params}, </if>
+            <if test="ip != null">`ip` = #{ip}, </if>
+            <if test="gmtCreate != null">`gmt_create` = #{gmtCreate}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="remove">
+        delete from mgr_log where id = #{value}
+    </delete>
+
+    <delete id="batchRemove">
+        delete from mgr_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,5 @@
+finance-common/target/
+finance-biz/target/
+finance-dal/target/
+finance-admin/target/
+.idea/

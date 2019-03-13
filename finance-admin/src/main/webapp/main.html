@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>阿拉丁金融财务客服系统</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="Publish_Time" content="2018-08-15 14:35:59" />
+
+    <link rel="stylesheet" type="text/css" href="/res3rd/js/layui/css/layui.css">
+    <script src="/res3rd/js/jquery/jquery-3.0.0.min.js"></script>
+    <script src="/res3rd/js/layui/layui.js"></script>
+
+    <script src="/res/js/config.js"></script>
+    <script src="/res3rd/js/tool/tool.js" ></script>
+    <script src="/res3rd/js/tool/date.format.js" ></script>
+
+    <style type="text/css">
+        p{display: inline-block;}
+
+        .logo{left: 50px !important; line-height: 50px !important;text-align: center; width: 300px; color: #333; font-size: 16px;}
+
+        /* START ------- 菜单栏 干预layui模块 */
+        .layui-header{background-color: #fff !important; height: 50px; line-height: 50px; border-bottom: 1px gray solid;}
+        .layui-header .layui-nav .layui-nav-item a{color: #1A1A1A !important; font-size: 15px;}
+        .layui-header .layui-nav .layui-nav-item{height: inherit;line-height: inherit;}
+        .layui-header .layui-bg-white{color: black; background-color: #fff !important;}
+        .layui-header .layui-nav .layui-nav-more{border-top-color: #8c7600;}
+        .layui-header .layui-nav .layui-nav-mored {border-color: transparent transparent #8c7600;}
+        .layui-header .layui-nav .layui-this:after, .layui-layout-admin .layui-header .layui-nav-bar{top: 0 !important;bottom: auto;background-color: #8c7600;}
+        .layui-header .layui-nav .layui-nav-child dd.layui-this a{background: 0 0;}
+        .layui-header .layui-nav .layui-nav-child dd.layui-this{background: 0 0;}
+        .layui-header .layui-layout-left{left: 300px;}
+
+        .layui-nav{background-color: #003530;}
+
+        .layui-side{top: 50px; background-color: #005d54;} /* 侧边栏背景色 */
+        .layui-nav-tree .layui-nav-item a:hover{background-color: #009082;} /* 菜单悬浮背景色 */
+        .layui-nav-tree .layui-nav-bar{background-color: #32f7e4;}/* 菜单悬浮左侧边框背景色 */
+        .layui-nav-tree .layui-nav-child dd.layui-this a{background-color: #009082;}/* 子菜单选中后背景色 */
+        .layui-nav-tree .layui-this>a{background-color: #009082;}/* 父菜单选中后背景色 */
+
+        .layui-tab{display: block; position: absolute; width:auto; bottom: 0px; top:50px; left: 200px ;
+            overflow-y: hidden; right: 0; margin: 0px 0px;}
+        .layui-tab .layui-tab-title li:first-of-type{margin-left: 15px;}
+        .layui-tab-item{height: 100%;}
+        .layui-tab-content{position: absolute;width: auto;top: 40px;bottom: 0;right: 0;left: 0; margin: 0; padding: 0;}
+        /* END ------ 菜单栏 干预layui模块 */
+
+        .iframe-template{width: 100%; overflow: hidden; border: none; height: 100%;}
+
+    </style>
+</head>
+<body>
+<!-- 菜单栏 -->
+<div id="divNavHeader" class="layui-header">
+    <div class="logo">阿拉丁金融线财务客服系统</div>
+    <ul class="layui-nav layui-bg-white layui-layout-right">
+        <li class="layui-nav-item" id="navUserCenter">
+            <a href="javascript:;" id="username">...</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:UI.showChangePwdPopup();" >修改密码</a></dd>
+                <dd><a href="javascript:UI.logout();" >退出登录</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+
+<div id="divNavLeft" class="layui-side" >
+    <ul class="layui-nav layui-nav-tree" lay-filter="nav-left">
+        <li class="layui-nav-item layui-nav-itemed" style="display: none;">
+            <a href="javascript:;" data-id="13">系统管理</a>
+            <dl class="layui-nav-child">
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/operator.html" data-id="1">管理员管理</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/auth.html" data-id="16">角色管理</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/log.html" data-id="11">系统日志管理</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item" style="display: none;">
+            <a href="javascript:;" data-id="14">财务管理</a>
+            <dl class="layui-nav-child">
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/actualIncome.html" data-id="2">实收管理</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/promiseIncome.html" data-id="3">应收管理</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/actualPaid.html" data-id="4">实付管理</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/refundData.html" data-id="5">退款数据</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/offlineRepayDataImport.html" data-id="6">线下还款数据导入</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/offlineBillData.html" data-id="7">线下入账数据</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/refundAuth.html" data-id="8">退款审核</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"  style="display: none;">
+            <a href="javascript:;" data-id="15">客服中心</a>
+            <dl class="layui-nav-child">
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/user.html" data-id="9">用户管理</a></dd>
+                <dd style="display: none;"><a href="javascript:;" data-click-url="/pages/offlineRepayDataQuery.html" data-id="10">线下还款数据查询</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+
+<div id="divTabBody" class="layui-tab" lay-filter="divTabBody" lay-allowClose="true">
+    <ul class="layui-tab-title">
+    </ul>
+    <div class="layui-tab-content">
+    </div>
+</div>
+<!--修改密码弹框-->
+<div id="divModify" style="display: none;">
+    <div class="layui-field-box">
+        <form class="layui-form" action="" id="formModify">
+            <div class="layui-form-item">
+                <label class="layui-form-label">原密码</label>
+                <div class="layui-input-inline">
+                    <input minlength="6" type="password" placeholder="输入原密码" id="oriPasswd" lay-verify="oriPasswd" autocomplete="off" class="layui-input" name="oriPasswd">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-inline">
+                    <input minlength="6" type="password" placeholder="密码" id="newPasswd" autocomplete="off" class="layui-input" name="newPasswd">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="rid"/>
+                    <button class="layui-btn wd120" type="button" lay-submit lay-filter="sbtnModify">确认修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- 页尾 -->
+<script type="text/javascript">
+    layui.config({
+        base: '/res/js/'
+    }).use('main'); //加载入口
+</script>
+</body>
+</html>
